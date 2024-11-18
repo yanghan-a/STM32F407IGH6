@@ -9,13 +9,23 @@ extern "C" {
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 #include "freertos_inc.h"
+#include "task.h"
+#include "main.h"
+#include "string.h"
+
 void Main();
-void OnUartCmd(uint8_t* _data, uint16_t _len);
-void OnCanCmd(uint8_t _cmd, uint8_t* _data, uint32_t _len);
+void OnTimer7Callback();
+void OnTimer10Callback();
+// void OnUartCmd(uint8_t* _data, uint16_t _len);
+// void OnCanCmd(uint8_t _cmd, uint8_t* _data, uint32_t _len);
 
 #ifdef __cplusplus
 }
 /*---------------------------- C++ Scope ---------------------------*/
 
+#include "communication.hpp"
+#include "actuators/ctrl_step/ctrl_step.hpp"
+#include "instances/dummy_robot.h"
+#include "timer.hpp"
 #endif
 #endif

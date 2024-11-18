@@ -22,8 +22,6 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "usart.h"
-#include <memory.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,6 +57,8 @@
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern CAN_HandleTypeDef hcan1;
+extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim10;
 extern DMA_HandleTypeDef hdma_usart6_rx;
 extern DMA_HandleTypeDef hdma_usart6_tx;
 extern UART_HandleTypeDef huart1;
@@ -187,7 +187,16 @@ void CAN1_TX_IRQHandler(void)
 void CAN1_RX0_IRQHandler(void)
 {
   /* USER CODE BEGIN CAN1_RX0_IRQn 0 */
-
+  if (( READ_REG(hcan1.Instance->IER) & CAN_IT_RX_FIFO0_MSG_PENDING) != 0U)
+  {
+    /* Check if message is still pending */
+    if ((hcan1.Instance->RF0R & CAN_RF0R_FMP0) != 0U)
+    {
+      /* Call weak (surcharged) callback */
+      HAL_CAN_RxFifo0MsgPendingCallback(&hcan1);
+    }
+  }
+  return;
   /* USER CODE END CAN1_RX0_IRQn 0 */
   HAL_CAN_IRQHandler(&hcan1);
   /* USER CODE BEGIN CAN1_RX0_IRQn 1 */
@@ -224,6 +233,20 @@ void CAN1_SCE_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
+  */
+void TIM1_UP_TIM10_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim10);
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART1 global interrupt.
   */
 void USART1_IRQHandler(void)
@@ -249,6 +272,20 @@ void TIM6_DAC_IRQHandler(void)
   /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
 
   /* USER CODE END TIM6_DAC_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM7 global interrupt.
+  */
+void TIM7_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
+  /* USER CODE END TIM7_IRQn 1 */
 }
 
 /**
@@ -299,20 +336,7 @@ void DMA2_Stream6_IRQHandler(void)
 void USART6_IRQHandler(void)
 {
   /* USER CODE BEGIN USART6_IRQn 0 */
-  if ((__HAL_UART_GET_FLAG(&huart6, UART_FLAG_IDLE) != RESET))
-  {
-    __HAL_UART_CLEAR_IDLEFLAG(&huart6);
-    HAL_UART_DMAStop(&huart6);
-    uint32_t temp = __HAL_DMA_GET_COUNTER(&hdma_usart6_rx);
-    rxLen = BUFFER_SIZE - temp;
 
-    OnRecvEnd(rx_buffer, rxLen);
-
-    memset(rx_buffer, 0, rxLen);
-    rxLen = 0;
-
-    HAL_UART_Receive_DMA(&huart6, rx_buffer, BUFFER_SIZE);
-  }
   /* USER CODE END USART6_IRQn 0 */
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */

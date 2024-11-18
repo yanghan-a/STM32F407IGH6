@@ -48,9 +48,14 @@
   * @{
   */
 /* Define size for the receive and transmit buffer over CDC */
-#define APP_RX_DATA_SIZE  2048
-#define APP_TX_DATA_SIZE  2048
+// #define APP_RX_DATA_SIZE  2048
+// #define APP_TX_DATA_SIZE  2048
 /* USER CODE BEGIN EXPORTED_DEFINES */
+
+#define USB_RX_DATA_SIZE  64
+#define USB_TX_DATA_SIZE  64
+#define APP_RX_DATA_SIZE  USB_RX_DATA_SIZE
+#define APP_TX_DATA_SIZE  USB_TX_DATA_SIZE
  extern USBD_HandleTypeDef hUsbDeviceFS;
  extern uint32_t Recv_dlen;
  extern uint8_t UserRxBuffer[1024];

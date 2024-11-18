@@ -512,7 +512,7 @@ uint32_t DummyRobot::CommandHandler::ParseCommand(const std::string &_cmd)
                 while (context->IsMoving() && context->IsEnabled())
                     osDelay(5);
                 Respond(*usbStreamOutputPtr, "ok");
-                Respond(*uart4StreamOutputPtr, "ok");
+                Respond(*uart6StreamOutputPtr, "ok");
             } else if (_cmd[0] == '@')
             {
                 float pose[6];
@@ -534,7 +534,7 @@ uint32_t DummyRobot::CommandHandler::ParseCommand(const std::string &_cmd)
                 while (context->IsMoving())
                     osDelay(5);
                 Respond(*usbStreamOutputPtr, "ok");
-                Respond(*uart4StreamOutputPtr, "ok");
+                Respond(*uart6StreamOutputPtr, "ok");
             }
 
             break;
@@ -558,7 +558,7 @@ uint32_t DummyRobot::CommandHandler::ParseCommand(const std::string &_cmd)
                                    joints[3], joints[4], joints[5]);
                 }
                 Respond(*usbStreamOutputPtr, "ok");
-                Respond(*uart4StreamOutputPtr, "ok");
+                Respond(*uart6StreamOutputPtr, "ok");
             } else if (_cmd[0] == '@')
             {
                 float pose[6];
@@ -575,7 +575,7 @@ uint32_t DummyRobot::CommandHandler::ParseCommand(const std::string &_cmd)
                     context->MoveL(pose[0], pose[1], pose[2], pose[3], pose[4], pose[5]);
                 }
                 Respond(*usbStreamOutputPtr, "ok");
-                Respond(*uart4StreamOutputPtr, "ok");
+                Respond(*uart6StreamOutputPtr, "ok");
             }
             break;
 

@@ -21,12 +21,9 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-#include "cmsis_os2.h"
 #include "retarget.h"
 #include "common_inc.h"
-#include "dma.h"
 
-#include "semphr.h"
 volatile uint8_t rxLen = 0;
 volatile uint8_t txLen = 0;
 uint8_t rx_buffer[BUFFER_SIZE] = {0};
@@ -93,11 +90,11 @@ void MX_USART6_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART6_Init 2 */
-  __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
+  // __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
   RetargetInit(&huart6);
-  Uart_SetIDLECallBack(OnUartCmd);//my callback function for IDLE interruption
+  // Uart_SetIDLECallBack(OnUartCmd);//my callback function for IDLE interruption
 
-  HAL_UART_Receive_DMA(&huart6, rx_buffer, BUFFER_SIZE);
+  // HAL_UART_Receive_DMA(&huart6, rx_buffer, BUFFER_SIZE);
   /* USER CODE END USART6_Init 2 */
 
 }
@@ -135,7 +132,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     /* USART1 interrupt Init */
-    HAL_NVIC_SetPriority(USART1_IRQn, 5, 0);
+    HAL_NVIC_SetPriority(USART1_IRQn, 6, 0);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
   /* USER CODE BEGIN USART1_MspInit 1 */
 
@@ -170,8 +167,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     hdma_usart6_rx.Init.MemInc = DMA_MINC_ENABLE;
     hdma_usart6_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_usart6_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_usart6_rx.Init.Mode = DMA_NORMAL;
-    hdma_usart6_rx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_usart6_rx.Init.Mode = DMA_CIRCULAR;
+    hdma_usart6_rx.Init.Priority = DMA_PRIORITY_MEDIUM;
     hdma_usart6_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_usart6_rx) != HAL_OK)
     {
@@ -189,7 +186,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     hdma_usart6_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_usart6_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
     hdma_usart6_tx.Init.Mode = DMA_NORMAL;
-    hdma_usart6_tx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_usart6_tx.Init.Priority = DMA_PRIORITY_MEDIUM;
     hdma_usart6_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_usart6_tx) != HAL_OK)
     {
@@ -199,7 +196,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     __HAL_LINKDMA(uartHandle,hdmatx,hdma_usart6_tx);
 
     /* USART6 interrupt Init */
-    HAL_NVIC_SetPriority(USART6_IRQn, 5, 0);
+    HAL_NVIC_SetPriority(USART6_IRQn, 6, 0);
     HAL_NVIC_EnableIRQ(USART6_IRQn);
   /* USER CODE BEGIN USART6_MspInit 1 */
 
@@ -259,9 +256,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void Uart_SetIDLECallBack(void(* xerc)(uint8_t*, uint16_t))
-{
-  OnRecvEnd = xerc;
-}
+// void Uart_SetIDLECallBack(void(* xerc)(uint8_t*, uint16_t))
+// {
+//   OnRecvEnd = xerc;
+// }
 /* USER CODE END 1 */
-

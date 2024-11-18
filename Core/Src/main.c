@@ -21,6 +21,7 @@
 #include "cmsis_os.h"
 #include "can.h"
 #include "dma.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
@@ -80,7 +81,7 @@ int a;
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  HAL_RCC_DeInit();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -96,12 +97,13 @@ int a;
   MX_CAN1_Init();
   MX_USART1_UART_Init();
   MX_USART6_UART_Init();
+  MX_TIM7_Init();
+  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
   /* Init scheduler */
-
   osKernelInitialize();
 
   /* Call init function for freertos objects (in cmsis_os2.c) */
@@ -169,7 +171,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void OnTimerCallback(TIM_TypeDef *timInstance);
 /* USER CODE END 4 */
 
 /**
@@ -189,7 +191,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-
+  else
+  {
+    OnTimerCallback(htim->Instance);
+  }
   /* USER CODE END Callback 1 */
 }
 
