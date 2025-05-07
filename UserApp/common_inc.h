@@ -14,10 +14,10 @@ extern "C" {
 #include "string.h"
 
 void Main();
+void OnTimer11Callback();
 void OnTimer7Callback();
 void OnTimer10Callback();
-// void OnUartCmd(uint8_t* _data, uint16_t _len);
-// void OnCanCmd(uint8_t _cmd, uint8_t* _data, uint32_t _len);
+
 
 #ifdef __cplusplus
 }

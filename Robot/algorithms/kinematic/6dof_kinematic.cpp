@@ -352,9 +352,9 @@ bool DOF6Kinematic::SolveIK(const DOF6Kinematic::Pose6D_t &_inputPose6D, const J
             } else
             {
                 qa[0][0] = atan_a + acos_a ;
-                qa[0][1] = -atan_e + acos_e - (float) M_PI_2;
+                qa[0][1] = atan_e + acos_e - (float) M_PI_2*3;
                 qa[1][0] = atan_a - acos_a ;
-                qa[1][1] = -atan_e - acos_e + (float) M_PI_2*3;
+                qa[1][1] = atan_e - acos_e + (float) M_PI_2;
             }
             for (i = 0; i < 2; i++)
             {
@@ -420,15 +420,15 @@ bool DOF6Kinematic::SolveIK(const DOF6Kinematic::Pose6D_t &_inputPose6D, const J
             {
                 if (0 == ind_arm)
                 {
-                    qw[0][0] = atan2f(R36[3], R36[0]);
-                    qw[0][2] = 0.0f;
-                    qw[1][2] = 0.0f;
+                    qw[0][0] = 0.0f;
+                    qw[0][2] = atan2f(R36[3], R36[0]);
+                    qw[1][2] = qw[0][2];
                     qw[1][0] = qw[0][0];
                 } else
                 {
-                    qw[0][0] = atan2f(R36[3], R36[0]);
-                    qw[0][2] = 0.0f;
-                    qw[1][2] = 0.0f;
+                    qw[0][0] = 0.0f;
+                    qw[0][2] = atan2f(R36[3], R36[0]);
+                    qw[1][2] = qw[0][2];
                     qw[1][0] = qw[0][0];
                 }
                 _outputSolves.solFlag[4 * ind_arm + 2 * ind_elbow + 0][2] = -1;
@@ -455,10 +455,10 @@ bool DOF6Kinematic::SolveIK(const DOF6Kinematic::Pose6D_t &_inputPose6D, const J
             {
                 if (qs[ind_arm] > (float) M_PI)
                     _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[0] =
-                        qs[ind_arm] - (float) M_PI;
+                        qs[ind_arm] - (float) 2*M_PI;
                 else if (qs[ind_arm] < -(float) M_PI)
                     _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[0] =
-                        qs[ind_arm] + (float) M_PI;
+                        qs[ind_arm] + (float) 2*M_PI;
                 else
                     _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[0] = qs[ind_arm];
 
@@ -466,10 +466,10 @@ bool DOF6Kinematic::SolveIK(const DOF6Kinematic::Pose6D_t &_inputPose6D, const J
                 {
                     if (qa[ind_elbow][i] > (float) M_PI)
                         _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[1 + i] =
-                            qa[ind_elbow][i] - (float) M_PI;
+                            qa[ind_elbow][i] - (float) 2*M_PI;
                     else if (qa[ind_elbow][i] < -(float) M_PI)
                         _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[1 + i] =
-                            qa[ind_elbow][i] + (float) M_PI;
+                            qa[ind_elbow][i] + (float) 2*M_PI;
                     else
                         _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[1 + i] =
                             qa[ind_elbow][i];
@@ -479,10 +479,10 @@ bool DOF6Kinematic::SolveIK(const DOF6Kinematic::Pose6D_t &_inputPose6D, const J
                 {
                     if (qw[ind_wrist][i] > (float) M_PI)
                         _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[3 + i] =
-                            qw[ind_wrist][i] - (float) M_PI;
+                            qw[ind_wrist][i] - (float) 2*M_PI;
                     else if (qw[ind_wrist][i] < -(float) M_PI)
                         _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[3 + i] =
-                            qw[ind_wrist][i] + (float) M_PI;
+                            qw[ind_wrist][i] + (float) 2*M_PI;
                     else
                         _outputSolves.config[4 * ind_arm + 2 * ind_elbow + ind_wrist].a[3 + i] =
                             qw[ind_wrist][i];

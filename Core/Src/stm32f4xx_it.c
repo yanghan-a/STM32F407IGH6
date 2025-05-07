@@ -22,6 +22,7 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+extern char arr1[30];
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,6 +60,7 @@ extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern CAN_HandleTypeDef hcan1;
 extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim10;
+extern TIM_HandleTypeDef htim11;
 extern DMA_HandleTypeDef hdma_usart6_rx;
 extern DMA_HandleTypeDef hdma_usart6_tx;
 extern UART_HandleTypeDef huart1;
@@ -224,7 +226,8 @@ void CAN1_RX1_IRQHandler(void)
 void CAN1_SCE_IRQHandler(void)
 {
   /* USER CODE BEGIN CAN1_SCE_IRQn 0 */
-
+  // sprintf(arr1, "CAN ErrorCode: 0x%lx\n", hcan1.ErrorCode);
+  // HAL_UART_Transmit_DMA(&huart6, (uint8_t *)arr1, sizeof(arr1));
   /* USER CODE END CAN1_SCE_IRQn 0 */
   HAL_CAN_IRQHandler(&hcan1);
   /* USER CODE BEGIN CAN1_SCE_IRQn 1 */
@@ -246,6 +249,17 @@ void TIM1_UP_TIM10_IRQHandler(void)
   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
 }
 
+
+void TIM1_TRG_COM_TIM11_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 0 */
+
+  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim11);
+  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 1 */
+
+  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 1 */
+}
 /**
   * @brief This function handles USART1 global interrupt.
   */

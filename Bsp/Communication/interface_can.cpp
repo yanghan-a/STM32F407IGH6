@@ -35,8 +35,11 @@
 #include <stm32f4xx_hal.h>
 #include <cmsis_os.h>
 
+#include "usart.h"
+
 // defined in can.c
 extern CAN_HandleTypeDef hcan1;
+extern char arr[10];
 // extern CAN_HandleTypeDef hcan2;
 
 CAN_context can1Ctx;
@@ -120,7 +123,8 @@ void tx_complete_callback(CAN_HandleTypeDef* hcan, uint8_t mailbox_idx)
 //    CAN_context* ctx = get_can_ctx(hcan);
 //    if (!ctx) return;
 //    ctx->tx_msg_cnt++;
-
+    // sprintf(arr, "222\n");
+    // HAL_UART_Transmit_DMA(&huart6, (uint8_t *) arr, sizeof(arr));
     if (hcan->Instance == CAN1)
         osSemaphoreRelease(sem_can1_txHandle);
     else if (hcan->Instance == CAN2)
@@ -246,7 +250,7 @@ void CanSendMessage(CAN_context* canCtx, uint8_t* txData, CAN_TxHeaderTypeDef* t
     else
         return;
 
-    if (semaphore_status == osOK)
-        HAL_CAN_AddTxMessage(canCtx->handle, txHeader, txData, &canCtx->last_heartbeat_mailbox);
+    // if (semaphore_status == osOK)
+    //     HAL_CAN_AddTxMessage(canCtx->handle, txHeader, txData, &canCtx->last_heartbeat_mailbox);
 }
 

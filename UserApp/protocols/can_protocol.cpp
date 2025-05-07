@@ -31,11 +31,17 @@ void OnCanMessage(CAN_context* canCtx, CAN_RxHeaderTypeDef* rxHeader, uint8_t* d
         case 0x25:
             memcpy(&dummy.motorJ[id]->temperature, data, sizeof(uint32_t));//(uint32_t) (data);
             break;
+        case 0x22:
+            dummy.motorJ[id]->UpdatePositionCurrentCallback(*(float*) (data), *(float*) (data+4));
+            break;
+        case 0x21:
+            dummy.motorJ[id]->UpdateAccelerationVelocitytCallback(*(float*) (data), *(float*) (data+4));
+            break;
         default:
             break;
         }
 
-        dummy.UpdateJointAnglesCallback();
+        dummy.UpdateJointAnglesCallback(id);
 
     } else if (canCtx->handle->Instance == CAN2)
     {

@@ -22,6 +22,9 @@ public:
 
     uint8_t nodeID;
     float angle = 0;
+    float current = 0;
+    float velocity = 0;
+    float acceleration = 0;
     float angleLimitMax;
     float angleLimitMin;
     uint32_t temperature = 0.0;
@@ -30,7 +33,9 @@ public:
     State state = STOP;
 
     void SetAngle(float _angle);
+    void DynamicCurrentOutput(float _current);
     void SetAngleWithVelocityLimit(float _angle, float _vel);
+    void SetAngleWithVelocityAndAcceleration(float _angle, float _vel, float _acc);
     // CAN Command
     void SetEnable(bool _enable);
     void SetEnableTemp(bool _enable);
@@ -38,8 +43,8 @@ public:
     void SetCurrentSetPoint(float _val);
     void SetVelocitySetPoint(float _val);
     void SetPositionSetPoint(float _val);
-
     void SetPositionWithVelocityLimit(float _pos, float _vel);
+    void SetPositionWithVelocityAndAcceleration(float _pos, float _vel, float _acc);
     void SetNodeID(uint32_t _id);
     void SetCurrentLimit(float _val);
     void SetVelocityLimit(float _val);
@@ -56,7 +61,10 @@ public:
     void EraseConfigs();
 
     void UpdateAngle();
+    void UpdateVelAcc();
     void UpdateAngleCallback(float _pos, bool _isFinished);
+    void UpdatePositionCurrentCallback(float _position, float _current);
+    void UpdateAccelerationVelocitytCallback(float _acceleration, float _velocity);
 
 
     // Communication protocol definitions
