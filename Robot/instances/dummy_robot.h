@@ -152,6 +152,12 @@ public:
     planner::Pose6D goal_pose = {};
     int32_t goal_index = 0;
     bool newplanner = false;
+    void ControlLoop();
+    void SetPlannerMode(planner_mode _mode);
+
+
+    void SetGoal(int32_t numberofpoints, float x, float y, float z, float a, float b, float c);
+    void StartPlanner(bool _withplanner);
 
 
     void Init();

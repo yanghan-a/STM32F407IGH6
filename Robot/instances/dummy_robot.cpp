@@ -758,3 +758,62 @@ void DummyRobot::TuningHelper::SetFreqAndAmp(float _freq, float _amp)
     frequency = _freq;
     amplitude = _amp;
 }
+
+void DummyRobot::ControlLoop()
+{
+    planner::Vector3D position = {currentPose6D.X , currentPose6D.Y , currentPose6D.Z};
+    planner::Vector3D orientation ={currentPose6D.A, currentPose6D.B, currentPose6D.C};//{0,0,0}
+    planner::Pose6D currentPose6D_ = {position, orientation};
+
+    if (requestPlannerMode != plannerMode)
+    {
+        plannerMode = requestPlannerMode;
+        newplanner = true;
+    }
+    if (newplanner)
+    {
+        newplanner = false;
+        switch (plannerMode)
+        {
+        case NO_PLANNER:
+            break;
+        case COMMAND_LINE:
+            planner_traj.line.NewTask(currentPose6D_);
+            targetPose6D = currentPose6D;
+            break;
+        }
+    }
+
+    switch (plannerMode)
+    {
+    case NO_PLANNER:
+        break;
+    case COMMAND_LINE:
+        planner_traj.line.CalcSoftGoal(goal_index, goal_pose);
+        targetPose6D = {planner_traj.line.catesian_temp_goal_pose.position.x*1000.0f,
+                        planner_traj.line.catesian_temp_goal_pose.position.y*1000.0f,
+                        planner_traj.line.catesian_temp_goal_pose.position.z*1000.0f,
+                        planner_traj.line.catesian_temp_goal_pose.orientation.x*RAD_TO_DEG,
+                        planner_traj.line.catesian_temp_goal_pose.orientation.y*RAD_TO_DEG,
+                        planner_traj.line.catesian_temp_goal_pose.orientation.z*RAD_TO_DEG};
+        MoveL(targetPose6D.X, targetPose6D.Y, targetPose6D.Z, targetPose6D.A, targetPose6D.B, targetPose6D.C);
+
+        break;
+    }
+}
+
+void DummyRobot::SetPlannerMode(planner_mode _mode)
+{
+    requestPlannerMode = _mode;
+}
+
+void DummyRobot::SetGoal(int32_t numberofpoints, float x, float y, float z, float a, float b, float c)
+{
+    goal_index = numberofpoints;
+    goal_pose = {{x, y, z},{a, b, c}};
+}
+
+void DummyRobot::StartPlanner(bool _withplanner)
+{
+    withplanner = _withplanner;
+}

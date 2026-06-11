@@ -318,6 +318,7 @@ void ThreadUartTx(void* argument)
 {
     for (;;)
     {
+        int m = 0;
 
         // Suspended here until got Notification.
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);

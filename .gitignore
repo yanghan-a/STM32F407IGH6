@@ -1,0 +1,46 @@
+# ---- Build output (CLion / CMake / Make) ----
+cmake-build-*/
+build/
+Build/
+Debug/
+Release/
+out/
+
+# CMake intermediate
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile.cmake
+*.cmake.stamp
+
+# ---- Compiler / linker artifacts ----
+*.o
+*.obj
+*.a.tmp
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.lst
+*.d
+*.su
+*.i
+*.s.tmp
+
+# ---- IDE: JetBrains CLion ----
+.idea/
+
+# ---- IDE: Eclipse / STM32CubeIDE (uncomment if you switch IDE) ----
+# .settings/
+# .metadata/
+
+# ---- STM32CubeMX ----
+# Regenerated from the .ioc; keep .ioc, ignore the generated journal.
+.mxproject
+
+# ---- OS / editor junk ----
+.DS_Store
+Thumbs.db
+*.swp
+*~
